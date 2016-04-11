@@ -1,0 +1,26 @@
+	
+			#p1,#p2,#tie{
+				font-family: arial,sans-serif;
+				color:green;
+			}
+			#options,#pa,#help,#ins{
+				font-family: arial,sans-serif;
+			}
+			b{
+				color:#0059b3;
+			}
+		button{
+			font-size: 20px;
+			font-family: arial,sans-serif;
+			background-color: #333;
+			color:white;
+			border-radius: 25px;
+		}
+		#ins{
+			color:#660033;
+		}
+			body{
+			background-image: url("../img/bg.jpg");
+			background-repeat: no-repeat;;
+			background-size: 100%;
+		}

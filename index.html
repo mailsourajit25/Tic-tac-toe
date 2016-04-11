@@ -1,0 +1,75 @@
+	<!DOCTYPE HTML>
+	<html>
+		<head>
+		<title>Tic Tac toe</title>
+		<link rel="SHORTCUT ICON" href="img/icon.ico">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script src="js/main.js"></script>
+		</head>
+		<body>
+			<table>
+				<tr>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td>
+						<table border="1" style="display: inline-block;">
+							<tr>
+								<td>
+									<a href="javascript:Move('A')" ><img src="img/blank.jpg" id="A" /></a>
+								</td>
+								<td>
+									<a href="javascript:Move('B')" ><img src="img/blank.jpg" id="B" /></a>
+								</td>
+								<td>
+									<a href="javascript:Move('C')" ><img src="img/blank.jpg" id="C" /></a>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<a href="javascript:Move('D')" ><img src="img/blank.jpg" id="D" /></a>
+								</td>
+								<td>
+									<a href="javascript:Move('E')"><img src="img/blank.jpg" id="E" /></a>
+								</td>
+								<td>
+									<a href="javascript:Move('F')" ><img src="img/blank.jpg" id="F" /></a>
+								</td>
+							</tr><tr>
+							<td>
+								<a href="javascript:Move('G')"><img src="img/blank.jpg" id="G"/></a>
+							</td>
+							<td>
+								<a href="javascript:Move('H')" ><img src="img/blank.jpg" id="H"/></a>
+							</td>
+							<td>
+								<a href="javascript:Move('I')" ><img src="img/blank.jpg" id="I" /></a>
+							</td>
+						</tr>
+					</table>
+
+					<div id="options" style="display: inline-block;padding:20px;">
+						<h3>
+							<b>Player 1</b><br>
+							Score : <span id="p1"></span><br>
+							<b>Player 2</b><br>
+							Score : <span id="p2"></span><br>
+							<b>Ties</b><br>
+							Score : <span id="tie"></span><br>
+						</h3>
+					</div>
+				</td>
+				<td style="padding:80px;">
+					<img src="img/logo.png" height="250" width="400"/>
+				</td>
+			</tr>
+		</table>
+	<hr/>
+	<button id="help" onclick="showhelp()">HELP</button>
+	<button id="pa" onclick="playagain()">PLAY AGAIN</button>
+	<h4 id="ins" style="display:block;">
+		Welcome to Tic-tac-toe! Player 1 plays with cross 'X' and player 2 plays with circle 'O'.Select the square where you want to put your symbol.The first player to get three squares wins.Good Luck!</h4>
+	</body> 
+</html>
