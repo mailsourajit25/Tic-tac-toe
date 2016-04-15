@@ -19,6 +19,8 @@ var count_pl1_wins=0;
 var count_pl2_wins=0;
 var count_ties=0;
 var pa_count=0;
+var mov=-1;//AI move
+var current_mode=1;//The default mode is two players mode..for vs computer mode;mode value will be 2
 var winarr=new Array();//holds those value where there is three square match
 for(var i=0;i<3;i++)
 winarr[i]='N';//N for no match
@@ -43,31 +45,57 @@ function playagain(){
 function Move(x){
 	temp=x;
 	ok=0;
-	if(whose_move==1)
+	if(whose_move==1 && winner==0)
 	{
 		check_space();
 		if(ok==1)
 		{
 			document.getElementById(x).src="img/cross.png";
 			whose_move=2;
-			process();
+			analyse();
+			if(current_mode==2 && winner==0)
+				aimove();
 		}
 		else
 			alert("The square is already occupied.Please select another square");
+		
 	}
-	else
+	else if(current_mode==1 && winner==0)
 	{
 		check_space();
 		if(ok==1)
 		{
 			document.getElementById(x).src="img/o.png";
 			whose_move=1;
-			process();
+			analyse();
 		}
 		else
 			alert("The square is already occupied.Please select another square");
 	}
 } 
+
+function aimove(){
+	ok=0;
+	var test;
+	var mov=-1;
+	aiwin();
+	if(mov==-1)
+	aiattack();
+	if(mov==-1)
+	{
+		while(ok!=1)
+		{
+			mov=Math.floor((Math.random()*8)+0);
+			test=String.fromCharCode(65+mov);
+			check_space_ai();
+		}
+	}
+	temp=String.fromCharCode(65+mov);
+	check_space();
+	document.getElementById(temp).src="img/o.png";
+	whose_move=1;
+	analyse();
+}
 
 //This function makes sure that the space is not already pre-occupied
 function check_space(){
@@ -85,11 +113,25 @@ function check_space(){
 	
 }
 
-function process(){
+function check_space_ai(){
+	for(var i=0;i<9;i++)
+	{
+		if(mov==i && grid[i]==0)
+		{
+			ok=1;//if ok is one then it means that the space is safe
+			break;
+		}	
+	}
+	
+}
+
+function analyse(){
 	check_winner();
+	var pr1=document.getElementById("ai").innerHTML;
+	var pr2=document.getElementById("human").innerHTML;
 	if(winner==1)
 	{
-		alert("Player 1 won");
+		alert(pr1+" won");
 		if(pa_count==0)
 		count_pl1_wins+=1;
 		pa_count=1;
@@ -97,7 +139,7 @@ function process(){
 	}
 	else if(winner==2)
 	{
-		alert("Player 2 won");
+		alert(pr2+" won");
 		if(pa_count==0)
 		count_pl2_wins+=1;
 		pa_count=1;
@@ -112,7 +154,7 @@ function process(){
 	document.getElementById("p1").innerHTML=count_pl1_wins;
 	document.getElementById("p2").innerHTML=count_pl2_wins;
 	document.getElementById("tie").innerHTML=count_ties;
-	if(winner!=0 || winner!=3)
+	if(winner>=1 && winner<=2)
 	{
 		for(var i=0;i<3;i++)
 		{
@@ -165,4 +207,114 @@ function check_winner()
 		}
 	else if(grid[0]!=0 && grid[1]!=0 && grid[2]!=0 && grid[3]!=0 && grid[4]!=0 && grid[5]!=0 && grid[6]!=0 && grid[7]!=0 && grid[8]!=0 && winner==0)
 		winner=3;
+}
+
+function chmode(){//Changes mode from single player to double player and vice versa
+	var p1=document.getElementById("ai").innerHTML;
+	var p2=document.getElementById("human").innerHTML;
+	if(p1=="Player 1" && p2=="Player 2")
+	{
+		document.getElementById("ai").innerHTML="Human";
+		document.getElementById("human").innerHTML="Computer";
+		current_mode=2;
+	}
+	else
+	{
+		document.getElementById("ai").innerHTML="Player 1";
+		document.getElementById("human").innerHTML="Player 2";
+		current_mode=1;	
+	}
+	playagain();
+	count_pl1_wins=0;
+	count_pl2_wins=0;
+	count_ties=0;
+	document.getElementById("p1").innerHTML=count_pl1_wins;
+	document.getElementById("p2").innerHTML=count_pl2_wins;
+	document.getElementById("tie").innerHTML=count_ties;
+}
+
+function aiwin(){
+	var i,mul;
+	for(i=0;i<7;i+=3)//horizontal rows
+	{
+		if(grid[i]==2 && grid[i+1]==2 && grid[i+2]==0)
+			mov=i+2;
+		else if(grid[i+1]==2 && grid[i+2]==2 && grid[i]==0)
+			mov=i;
+		else if(grid[i]==2 && grid[i+2]==2 && grid[i+1]==0)
+			mov=i+1;
+	}
+
+	if(mov==-1)
+	{
+		for(i=0;i<=2;i++)//vertical rows
+		{
+			if(grid[i]==2 && grid[i+3]==2 && grid[i+6]==0)
+				mov=i+6;
+			else if(grid[i+3]==2 && grid[i+6]==2 && grid[i]==0)
+				mov=i;
+			else if(grid[i]==2 && grid[i+6]==2 && grid[i+3]==0)
+				mov=i+3;	
+		}	
+	}
+	
+	if(mov==-1)
+	{
+		for(i=0;i<=2;i+=2)//criss-cross
+		{
+			if(i==0)
+				mul=4;//multiplier for 0,4,8
+			else
+				mul=2;//multiplier for 2,4,6
+			if(grid[i]==2 && grid[i+mul]==2 && grid[i+2*mul]==0)
+				mov=i+2*mul;
+			else if(grid[i+mul]==2 && grid[i+2*mul]==2 && grid[i]==0)
+				mov=i;
+			else if(grid[i]==2 && grid[i+2*mul]==2 && grid[i+mul]==0)
+				mov=i+mul;	
+		}
+	}
+}
+
+function aiattack(){
+	var i,mul;
+	for(i=0;i<7;i+=3)//horizontal rows
+	{
+		if(grid[i]==1 && grid[i+1]==1 && grid[i+2]==0)
+			mov=i+2;
+		else if(grid[i+1]==1 && grid[i+2]==1 && grid[i]==0)
+			mov=i;
+		else if(grid[i]==1 && grid[i+2]==1 && grid[i+1]==0)
+			mov=i+1;
+	}
+
+	if(mov==-1)
+	{
+		for(i=0;i<=2;i++)//vertical rows
+		{
+			if(grid[i]==1 && grid[i+3]==1 && grid[i+6]==0)
+				mov=i+6;
+			else if(grid[i+3]==1 && grid[i+6]==1 && grid[i]==0)
+				mov=i;
+			else if(grid[i]==1 && grid[i+6]==1 && grid[i+3]==0)
+				mov=i+3;	
+		}	
+	}
+	
+	if(mov==-1)
+	{
+		for(i=0;i<=2;i+=2)//criss-cross
+		{
+			if(i==0)
+				mul=4;//multiplier for 0,4,8
+			else
+				mul=2;//multiplier for 2,4,6
+			if(grid[i]==1 && grid[i+mul]==1 && grid[i+2*mul]==0)
+				mov=i+2*mul;
+			else if(grid[i+mul]==1 && grid[i+2*mul]==1 && grid[i]==0)
+				mov=i;
+			else if(grid[i]==1 && grid[i+2*mul]==1 && grid[i+mul]==0)
+				mov=i+mul;	
+		}
+	}
 }
