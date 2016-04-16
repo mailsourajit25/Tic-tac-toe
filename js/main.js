@@ -131,7 +131,7 @@ function aimove(){
 	analyse();
 }
 
-function aiwin(){
+function aiwin(){//Checks whether there are any winning chances for computer
 	var i,mul;
 	for(i=0;i<7;i+=3)//horizontal rows
 	{
@@ -174,7 +174,7 @@ function aiwin(){
 	}
 }
 
-function aiattack(){
+function aiattack(){//checks whether it can defend the attack of the player
 	var i,mul;
 	for(i=0;i<7;i+=3)//horizontal rows
 	{
