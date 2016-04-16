@@ -41,6 +41,38 @@ function playagain(){
 	winner=0;
 }
 
+function reset(){
+	var p1,p2;
+	if(current_mode==2)
+	{
+		p1=prompt("Enter name of player one");
+		if(p1==null || p1==="")
+			document.getElementById("human").innerHTML="Human";
+		else
+			document.getElementById("human").innerHTML=p1;
+		document.getElementById("ai").innerHTML="Computer";
+	}
+	else
+	{
+		p1=prompt("Enter name of player one");
+		p2=prompt("Enter name of player two");
+		if(p1==null || p2==null || p1==="" || p2===""){
+			document.getElementById("human").innerHTML="Player 1";
+			document.getElementById("ai").innerHTML="Player 2";
+		}
+		else{
+			document.getElementById("human").innerHTML=p1;
+			document.getElementById("ai").innerHTML=p2;	
+		}	
+	}
+	playagain();
+	count_pl1_wins=0;
+	count_pl2_wins=0;
+	count_ties=0;
+	document.getElementById("p1").innerHTML=count_pl1_wins;
+	document.getElementById("p2").innerHTML=count_pl2_wins;
+	document.getElementById("tie").innerHTML=count_ties;
+}
 //This function is used to put cross or circle
 function Move(x){
 	temp=x;
@@ -76,18 +108,20 @@ function Move(x){
 
 function aimove(){
 	ok=0;
-	var test;
-	var mov=-1;
+	mov=-1;
 	aiwin();
 	if(mov==-1)
-	aiattack();
+		aiattack();
 	if(mov==-1)
 	{
 		while(ok!=1)
 		{
 			mov=Math.floor((Math.random()*8)+0);
-			test=String.fromCharCode(65+mov);
-			check_space_ai();
+			if(grid[mov]==0)
+			{
+				ok=1;//if ok is one then it means that the space is safe
+				break;
+			}
 		}
 	}
 	temp=String.fromCharCode(65+mov);
@@ -95,142 +129,6 @@ function aimove(){
 	document.getElementById(temp).src="img/o.png";
 	whose_move=1;
 	analyse();
-}
-
-//This function makes sure that the space is not already pre-occupied
-function check_space(){
-	var arr=['A','B','C','D','E','F','G','H','I'];
-	for(var i=0;i<9;i++)
-	{
-		if(temp==arr[i] && grid[i]==0)
-		{
-			ok=1;//if ok is one then it means that the space is safe
-			if(whose_move==1) grid[i]=1;
-			if(whose_move==2) grid[i]=2;
-			break;
-		}	
-	}
-	
-}
-
-function check_space_ai(){
-	for(var i=0;i<9;i++)
-	{
-		if(mov==i && grid[i]==0)
-		{
-			ok=1;//if ok is one then it means that the space is safe
-			break;
-		}	
-	}
-	
-}
-
-function analyse(){
-	check_winner();
-	var pr1=document.getElementById("ai").innerHTML;
-	var pr2=document.getElementById("human").innerHTML;
-	if(winner==1)
-	{
-		alert(pr1+" won");
-		if(pa_count==0)
-		count_pl1_wins+=1;
-		pa_count=1;
-		
-	}
-	else if(winner==2)
-	{
-		alert(pr2+" won");
-		if(pa_count==0)
-		count_pl2_wins+=1;
-		pa_count=1;
-	}
-	else if(winner==3)
-	{
-		alert("It is a Tie");
-		if(pa_count==0)
-		count_ties+=1;
-		pa_count=1;
-	}
-	document.getElementById("p1").innerHTML=count_pl1_wins;
-	document.getElementById("p2").innerHTML=count_pl2_wins;
-	document.getElementById("tie").innerHTML=count_ties;
-	if(winner>=1 && winner<=2)
-	{
-		for(var i=0;i<3;i++)
-		{
-			document.getElementById(winarr[i]).src="img/crown.png";
-		}
-	}
-}
-
-function check_winner()
-{
-	if(grid[0]==grid[1] && grid[1]==grid[2] && (grid[0]==1 || grid[0]==2))
-		{
-			winner=grid[0];
-			winarr=['A','B','C'];
-		}
-	else if(grid[3]==grid[4] && grid[4]==grid[5] && (grid[3]==1 || grid[3]==2))
-		{
-			winner=grid[3];
-			winarr=['D','E','F'];
-		}
-	else if(grid[6]==grid[7] && grid[7]==grid[8] && (grid[6]==1 || grid[6]==2))
-		{
-			winner=grid[6];
-			winarr=['G','H','I'];
-		}
-	else if(grid[0]==grid[3] && grid[3]==grid[6] && (grid[0]==1 || grid[0]==2))
-		{
-			winner=grid[0];
-			winarr=['A','D','G'];
-		}
-	else if(grid[1]==grid[4] && grid[4]==grid[7] && (grid[1]==1 || grid[1]==2))
-		{
-			winner=grid[1];
-			winarr=['B','E','H'];
-		}
-	else if(grid[2]==grid[5] && grid[5]==grid[8] && (grid[2]==1 || grid[2]==2))
-		{
-			winner=grid[2];
-			winarr=['C','F','I'];
-		}
-	else if(grid[0]==grid[4] && grid[4]==grid[8] && (grid[0]==1 || grid[0]==2))
-		{
-			winner=grid[0];
-			winarr=['A','E','I'];
-		}
-	else if(grid[2]==grid[4] && grid[4]==grid[6] && (grid[2]==1 || grid[2]==2))
-		{
-			winner=grid[2];
-			winarr=['C','E','G'];
-		}
-	else if(grid[0]!=0 && grid[1]!=0 && grid[2]!=0 && grid[3]!=0 && grid[4]!=0 && grid[5]!=0 && grid[6]!=0 && grid[7]!=0 && grid[8]!=0 && winner==0)
-		winner=3;
-}
-
-function chmode(){//Changes mode from single player to double player and vice versa
-	var p1=document.getElementById("ai").innerHTML;
-	var p2=document.getElementById("human").innerHTML;
-	if(p1=="Player 1" && p2=="Player 2")
-	{
-		document.getElementById("ai").innerHTML="Human";
-		document.getElementById("human").innerHTML="Computer";
-		current_mode=2;
-	}
-	else
-	{
-		document.getElementById("ai").innerHTML="Player 1";
-		document.getElementById("human").innerHTML="Player 2";
-		current_mode=1;	
-	}
-	playagain();
-	count_pl1_wins=0;
-	count_pl2_wins=0;
-	count_ties=0;
-	document.getElementById("p1").innerHTML=count_pl1_wins;
-	document.getElementById("p2").innerHTML=count_pl2_wins;
-	document.getElementById("tie").innerHTML=count_ties;
 }
 
 function aiwin(){
@@ -317,4 +215,141 @@ function aiattack(){
 				mov=i+mul;	
 		}
 	}
+}
+
+function chmode(){//Changes mode from single player to double player and vice versa
+	var p1,p2;
+	if(current_mode==1)
+	{
+		p1=prompt("Enter name of player one");
+		if(p1==null || p1==="")
+			document.getElementById("human").innerHTML="Human";
+		else
+			document.getElementById("human").innerHTML=p1;
+		document.getElementById("ai").innerHTML="Computer";
+		current_mode=2;
+	}
+	else
+	{
+		p1=prompt("Enter name of player one");
+		p2=prompt("Enter name of player two");
+		if(p1==null || p2==null || p1==="" || p2===""){
+			document.getElementById("human").innerHTML="Player 1";
+			document.getElementById("ai").innerHTML="Player 2";
+		}
+		else{
+			document.getElementById("human").innerHTML=p1;
+			document.getElementById("ai").innerHTML=p2;	
+		}	
+		current_mode=1;	
+	}
+	playagain();
+	count_pl1_wins=0;
+	count_pl2_wins=0;
+	count_ties=0;
+	document.getElementById("p1").innerHTML=count_pl1_wins;
+	document.getElementById("p2").innerHTML=count_pl2_wins;
+	document.getElementById("tie").innerHTML=count_ties;
+}
+
+
+//This function makes sure that the space is not already pre-occupied
+function check_space(){
+	var arr=['A','B','C','D','E','F','G','H','I'];
+	for(var i=0;i<9;i++)
+	{
+		if(temp==arr[i] && grid[i]==0)
+		{
+			ok=1;//if ok is one then it means that the space is safe
+			if(whose_move==1) grid[i]=1;
+			if(whose_move==2) grid[i]=2;
+			break;
+		}	
+	}
+	
+}
+
+
+function analyse(){
+	check_winner();
+	var pr1=document.getElementById("human").innerHTML;
+	var pr2=document.getElementById("ai").innerHTML;
+	if(winner==1)
+	{
+		alert(pr1+" won");
+		if(pa_count==0)
+		count_pl1_wins+=1;
+		pa_count=1;
+		
+	}
+	else if(winner==2)
+	{
+		alert(pr2+" won");
+		if(pa_count==0)
+		count_pl2_wins+=1;
+		pa_count=1;
+	}
+	else if(winner==3)
+	{
+		alert("It is a Tie");
+		if(pa_count==0)
+		count_ties+=1;
+		pa_count=1;
+	}
+	document.getElementById("p1").innerHTML=count_pl1_wins;
+	document.getElementById("p2").innerHTML=count_pl2_wins;
+	document.getElementById("tie").innerHTML=count_ties;
+	if(winner>=1 && winner<=2)
+	{
+		for(var i=0;i<3;i++)
+		{
+			document.getElementById(winarr[i]).src="img/crown.png";
+		}
+	}
+}
+
+function check_winner()
+{
+	if(grid[0]==grid[1] && grid[1]==grid[2] && (grid[0]==1 || grid[0]==2))
+		{
+			winner=grid[0];
+			winarr=['A','B','C'];
+		}
+	else if(grid[3]==grid[4] && grid[4]==grid[5] && (grid[3]==1 || grid[3]==2))
+		{
+			winner=grid[3];
+			winarr=['D','E','F'];
+		}
+	else if(grid[6]==grid[7] && grid[7]==grid[8] && (grid[6]==1 || grid[6]==2))
+		{
+			winner=grid[6];
+			winarr=['G','H','I'];
+		}
+	else if(grid[0]==grid[3] && grid[3]==grid[6] && (grid[0]==1 || grid[0]==2))
+		{
+			winner=grid[0];
+			winarr=['A','D','G'];
+		}
+	else if(grid[1]==grid[4] && grid[4]==grid[7] && (grid[1]==1 || grid[1]==2))
+		{
+			winner=grid[1];
+			winarr=['B','E','H'];
+		}
+	else if(grid[2]==grid[5] && grid[5]==grid[8] && (grid[2]==1 || grid[2]==2))
+		{
+			winner=grid[2];
+			winarr=['C','F','I'];
+		}
+	else if(grid[0]==grid[4] && grid[4]==grid[8] && (grid[0]==1 || grid[0]==2))
+		{
+			winner=grid[0];
+			winarr=['A','E','I'];
+		}
+	else if(grid[2]==grid[4] && grid[4]==grid[6] && (grid[2]==1 || grid[2]==2))
+		{
+			winner=grid[2];
+			winarr=['C','E','G'];
+		}
+	else if(grid[0]!=0 && grid[1]!=0 && grid[2]!=0 && grid[3]!=0 && grid[4]!=0 && grid[5]!=0 && grid[6]!=0 && grid[7]!=0 && grid[8]!=0 && winner==0)
+		winner=3;
 }

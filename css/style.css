@@ -24,3 +24,19 @@
 			background-repeat: no-repeat;;
 			background-size: 100%;
 		}
+		#cmode{
+			font-family: arial,sans-serif;
+			border:1px solid white;
+			border-radius: 10px;
+			background-color: #330014;
+			color:white;
+			padding: 1px;
+		}
+		#reset{
+			font-family: arial,sans-serif;
+			border:1px solid white;
+			border-radius: 10px;
+			background-color: #00264d;
+			color:white;
+			text-align: center;
+		}

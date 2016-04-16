@@ -51,11 +51,12 @@
 					</table>
 
 					<div id="options" style="display: inline-block;padding:20px;">
-						<h2 id="cmode" onclick="chmode()">CHANGE MODE</h2>
+						<h3 id="reset" onclick="reset()"> RESET </h3>
+						<h3 id="cmode" onclick="chmode()"> CHANGE MODE </h3>
 						<h3>
-							<b id="ai">Player 1</b><br>
+							<b id="human">Player 1</b><br>
 							Score : <span id="p1"></span><br>
-							<b id="human">Player 2</b><br>
+							<b id="ai">Player 2</b><br>
 							Score : <span id="p2"></span><br>
 							<b>Ties</b><br>
 							Score : <span id="tie"></span><br>
@@ -71,6 +72,6 @@
 	<button id="help" onclick="showhelp()">HELP</button>
 	<button id="pa" onclick="playagain()">PLAY AGAIN</button>
 	<h4 id="ins" style="display:block;">
-		Welcome to Tic-tac-toe! Player 1 plays with cross 'X' and player 2 plays with circle 'O'.Select the square where you want to put your symbol.The first player to get three squares wins.Good Luck!</h4>
+		Welcome to Tic-tac-toe! Player 1 plays with cross 'X' and player 2 plays with circle 'O'.Select the square where you want to put your symbol.The first player to get three squares wins."CHANGE MODE" option changes mode from single player to double player."RESET" option gives option to change name of the player.Good Luck!</h4>
 	</body> 
 </html>
