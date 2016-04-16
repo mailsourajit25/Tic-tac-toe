@@ -158,7 +158,7 @@ function aiwin(){//Checks whether there are any winning chances for computer
 	
 	if(mov==-1)
 	{
-		for(i=0;i<=2;i+=2)//criss-cross diagonals
+		for(i=0;i<=2;i+=2)//criss-cross
 		{
 			if(i==0)
 				mul=4;//multiplier for 0,4,8
